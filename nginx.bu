@@ -14,7 +14,20 @@ storage:
           [Container]
           ContainerName=nginx
           Image=docker.io/nginx
+          Volume=/var/lib/nginx-static:/usr/share/nginx:ro,z
+          Volume=/var/lib/nginx-config:/etc/nginx:ro,Z
           PublishPort=80:80
 
           [Install]
           WantedBy=multi-user.target
+  filesystems:
+    - path: /var/lib/nginx-static
+      device: /dev/disk/by-id/scsi-0DO_Volume_nginx-static-fra1-01
+      format: ext4
+      wipe_filesystem: false
+      with_mount_unit: true
+    - path: /var/lib/nginx-config
+      device: /dev/disk/by-id/scsi-0DO_Volume_nginx-config-fra1-01
+      format: ext4
+      wipe_filesystem: false
+      with_mount_unit: true
