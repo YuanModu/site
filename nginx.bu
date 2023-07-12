@@ -2,6 +2,8 @@ variant: fcos
 version: 1.4.0
 systemd:
   units:
+    - name: docker.service
+      mask: true
     - name: environment.service
       enabled: true
       contents: |
