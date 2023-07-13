@@ -1,0 +1,31 @@
+variant: fcos
+version: 1.4.0
+systemd:
+  units:
+    - name: docker.service
+      mask: true
+storage:
+  files:
+    - path: /etc/containers/systemd/wagtail.container
+      overwrite: true
+      contents:
+        inline: |
+          [Unit]
+          Description=Wagtail Service
+          Wants=network-online.target
+          After=network-online.target
+
+          [Container]
+          ContainerName=wagtail
+          Image=docker.io/yuanmodu/wagtail
+          Volume=/var/lib/wagtail-media:/code/media:ro,z
+          PublishPort=8000:8000
+
+          [Install]
+          WantedBy=multi-user.target
+  filesystems:
+    - path: /var/lib/wagtail-media
+      device: /dev/disk/by-id/scsi-0DO_Volume_wagtail-media-fra1-01
+      format: ext4
+      wipe_filesystem: false
+      with_mount_unit: true
